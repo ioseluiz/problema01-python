@@ -158,9 +158,9 @@ class Problema01():
         elif(self.y<(self.l1+self.l2)):
             termino_c = 0
         # termino d
-        if(self.y>self.x):
+        if(self.y >self.x):
             termino_d = self.pu*(self.y-self.x)
-        elif(self.y<self.x):
+        elif(self.y < self.x):
             termino_d = 0
         
         return termino_a * (ay + termino_b + termino_c - termino_d)
@@ -207,11 +207,69 @@ class Problema01():
                 termino_n = 1/6*(termino_n1 + termino_n2 + termino_n3)
 
                 deformarcion = 1/(self.e*self.ine)*(1/6*(ay*self.y**3+by*(self.y-self.l1)**3-self.pu*(self.y-self.x)**3)+termino_z*self.y + termino_n)
+            elif((self.y>(self.l1+self.l2)) and (self.y<(self.l1+self.l2+self.l3))):
+                lt = self.suma_longitudes(self.l1,self.l2,self.l3)
+                termino_z1 = -(self.pu*((self.l1+self.l2-self.x)**3-(lt-self.x)**3))/(6*self.l3)
+                termino_z2 = - ay*lt**3/(6*self.l3)
+                termino_z3 = -by*(self.l2+self.l3)**3/(6*self.l3)
+                termino_z4 = -cy*self.l3**2/6
+                termino_z5 = ay*(self.l1+self.l2)**3/(6*self.l3)
+                termino_z6 = by*(self.l2)**3/(6*self.l3)
+                termino_z = termino_z1 + termino_z2 + termino_z3 + termino_z4 + termino_z5 + termino_z6
+
+                termino_n1 = self.pu*(self.l1+self.l2-self.x)**3/6
+                termino_n2 = -ay*(self.l1+self.l2)**3/6
+                termino_n3 = -by*self.l2**3/6
+                termino_n4 = -termino_z*(self.l1+self.l2)
+                termino_n = termino_n1 + termino_n2 + termino_n3 + termino_n4
+
+                termino_d = 1/6*(ay*self.y**3+by*(self.y-self.l1)**3+cy*(self.y-self.l2-self.l1)**3 - self.pu*(self.y-self.x)**3)
+                deformacion = (1/(self.e*self.ine))*(termino_d + termino_z*self.y + termino_n)
+
 
         elif self.procedimiento == 2:
-            pass
+            if(self.y<self.l1):
+                deformacion = (1/(self.e*self.ine))*(ay/6*(self.y**3 - self.y*(self.l1)**2))
+            elif((self.y > self.l1) and (self.y < (self.l1+self.l2))):
+                termino_z1 = -ay*(self.l1+self.l2)**3
+                termino_z2 = -by*self.l2**3
+                termino_z3 = self.pu*(self.l1+self.l2-self.x)**3
+                termino_z4 = ay*self.l1**3
+                termino_z = (1/(6*self.l2))*(termino_z1 + termino_z2 + termino_z3 + termino_z4)
+
+                termino_n = (1/6)*(-ay*self.l1**3)-termino_z*self.l1
+
+                deformacion = (1/(self.e*self.ine))*((1/6)*(ay*self.y**3+by*(self.y-self.l1)**3-self.pu*(self.y-self.x)**3) + termino_z*self.y + termino_n)
+            elif((self.y>(self.l1+self.l2)) and (self.y<(self.l1+self.l2+self.l3))):
+                lt = self.suma_longitudes(self.l1,self.l2,self.l3)
+                termino_z1 = -ay*lt**3 - by*lt**3 - cy*lt**3 + self.pu*(self.l1+self.l2-self.x)**3
+                termino_z2 = -self.pu*(self.l1+self.l2-self.x)**3+cy*self.l1**3+by*self.l2**3+ay*(self.l1+self.l2)**3
+                termino_z = (1/(6*self.l3))*(termino_z1 + termino_z2)
+
+                termino_n1 = -ay*(self.l1+self.l2)**3 - by*self.l2**3 - cy*self.l1**3 + self.pu*(self.l1+self.l2-self.x)**3
+                termino_n = (1/6)*(termino_n1) - termino_z * (self.l1 + self.l2)
+
+                deformacion = (1/(self.e*self.ine))*(1/6*(ay*self.y**3+by*(self.y-self.l1)**3-self.pu*(self.y-self.x)**3)+termino_z*self.y+termino_n)
+
         elif self.procedimiento ==3:
-            pass
+            if(self.y<self.l1):
+                deformacion = (1/(self.e*self.ine))*(ay/6*(self.y**3-self.l1**2*self.y))
+            elif((self.y > self.l1) and (self.y < (self.l1+self.l2))):
+                termino_z = (1/(6*self.l2))*(-ay*self.l1**3 + ay*(self.l1+self.l2)**3+by*self.l2**3)
+                termino_n = -((ay*self.l1**3)/6 - termino_z*self.l1)
+                deformacion = (1/(self.e*self.ine))*((ay*self.y**3)/6+by*(self.y-self.l1)**3/6 + termino_z * self.y + termino_n)
+            elif((self.y>(self.l1+self.l2)) and (self.y<(self.l1+self.l2+self.l3))):
+                lt = self.suma_longitudes(self.l1,self.l2,self.l3)
+                termino_z1 = -ay*(self.l1+self.l2)**3 + ay*lt**3 - by*self.l2**3 + by*(lt-self.l1)**3
+                termino_z2 = cy*self.l3**3 - (self.pu*(lt-self.x)**3)/6
+                termino_z = (1/(6*self.l3))*(termino_z1 + termino_z2)
+
+                termino_n = -(ay*(self.l1+self.l2)**3)/6 - (by*(self.l2)**3)/6 - termino_z *(self.l1+self.l2)
+
+                deformacion = (1/(self.e*self.ine)) * (1/6*(ay*self.y**3 + by*(self.y-self.l1)**3 + cy*(self.y-self.l2-self.l1)**3 - self.pu*(self.y-self.x)**3) + termino_z*self.y + termino_n)
+
+
+            
 
        
         return deformacion
